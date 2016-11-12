@@ -7,6 +7,7 @@ import backend
 class Image(object):
     def __init__(self, layer):
         self.layer = layer
+        self.layer.set_alpha(255)
 
     @property
     def size(self):

@@ -9,5 +9,6 @@ def new_layer(size):
     return pygame.Surface(size, pygame.HWSURFACE|pygame.SRCALPHA)
 
 def load_image(image_name):
-    return resources.Image(pygame.image.load(image_name).convert_alpha())
+    srf = resources.Image(pygame.image.load(image_name).convert())#_alpha())
+    return srf
 
