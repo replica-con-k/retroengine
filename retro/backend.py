@@ -22,6 +22,10 @@ def load_image(image_name):
     srf = resources.Image(pygame.image.load(image_name).convert())
     return srf
 
+def load_animation(image_list, fps=1):
+    layers = [pygame.image.load(image).convert_alpha() for image in image_list]
+    return resources.Animation(layers, fps)
+
 def update_display(area=None):
     if not area:
         pygame.display.flip()

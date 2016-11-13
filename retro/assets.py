@@ -66,7 +66,9 @@ def load(resources_fname, is_required=True):
     # More than one resource:
     # Only one type at a time!
     valid_type = _file_type_(resources[0])
-    if any(_file_type_(resources[resource]) != valid_type) and is_required:
+    if any(
+        [(_file_type_(resource) != valid_type)
+         for resource in resources]) and is_required:
         raise UnrecognizedAsset('mix of file types')
 
     if valid_type == _IMAGE_ASSET_:

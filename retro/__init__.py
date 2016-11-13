@@ -9,4 +9,3 @@ import display
 
 def new_display(*args, **kwargs):
     return display.new(*args, **kwargs)
-    

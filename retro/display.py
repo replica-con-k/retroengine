@@ -4,12 +4,13 @@
 
 import retro.backend
 
-_DEFAULT_SIZE_ = (1024, 768)
-_DEFAULT_FPS_ = 60
 
+DEFAULT_RESOLUTION = (1024, 768)
+DEFAULT_FPS = 60
+CURRENT_FPS = DEFAULT_FPS
 
 class Display(object):
-    def __init__(self, resolution=_DEFAULT_SIZE_, fps=_DEFAULT_FPS_):
+    def __init__(self, resolution=DEFAULT_RESOLUTION, fps=DEFAULT_FPS):
         self.__scr = retro.backend.set_mode(resolution)
         self.__clock = retro.backend.new_clock()
         self.__fps = fps
@@ -39,5 +40,10 @@ class Display(object):
                 retro.backend.update_display(area)
             
 
-def new(resolution=_DEFAULT_SIZE_, fps=_DEFAULT_FPS_):
+def new(resolution=DEFAULT_RESOLUTION, fps=DEFAULT_FPS):
+    global __CURRENT_FPS__
+    __CURRENT_FPS__ = fps
     return Display(resolution, fps)
+
+def get_game_fps():
+    return __CURRENT_FPS__
