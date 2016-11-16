@@ -8,15 +8,16 @@ import display
 class Image(object):
     def __init__(self, layer):
         self.layer = layer
+        self.__bounding_box = layer.get_bounding_rect()
         self.layer.set_alpha(255)
 
     @property
     def size(self):
-        return self.layer.get_size()
+        return self.bounding_box.size
 
     @property
     def bounding_box(self):
-        return self.layer.get_bounding_rect()
+        return self.__bounding_box
 
 
 class Animation(Image):
@@ -158,6 +159,82 @@ class Loop(Animation):
         if self.ended:
             self.reset()
         return frame
+
+
+class Skin(object):
+    def __init__(self, animations={}, default='default', sounds={}):
+        assert(default in animations.keys())
+        self.__anims = animations
+        self.__sounds = sounds
+        self.__default_action = default
+        self.__current = None
+        self.do(default)
+
+    @property
+    def layer(self):
+        return self.__anims[self.__current].layer
+
+    @property
+    def bounding_box(self):
+        return self.__anims[self.__current].bounding_box
+
+    @property
+    def size(self):
+        return self.__anims[self.__current].size
+
+    def clone(self):
+        anims = {}
+        sounds = {}
+        for action in self.actions:
+            anims[action] = self[action].copy()
+            if action in self.__sounds.keys():
+                sounds[action] = self.__sounds[action]
+        return Skin(anims, self.default_action, sounds)
+
+    @property
+    def default_action(self):
+        return self.__default_action
+
+    @default_action.setter
+    def default_action(self, new_action):
+        assert(new_action in self.actions)
+        self.__default_action = new_action
+        
+    @property
+    def action(self):
+        return self.__current
+
+    @property
+    def actions(self):
+        return self.__anims.keys()
+
+    @property
+    def ended(self):
+        return self.__anims[self.__current].ended
+
+    def reset(self, animation=None):
+        animation = animation or self.__default
+        self.do(animation)
+
+    def do(self, animation):
+        if animation == self.__current:
+            return
+        assert(animation in self.actions)
+        self.__current = animation
+        self.__anims[self.__current].reset()
+        if animation in self.__sounds.keys():
+            backend.play_sound(self.__sounds[animation])
+
+    def add_action(self, action, animation, sound=None):
+        self.__anims[action] = animation
+        if sound is not None:
+            self.__sounds[action] = sound
+            
+    def __getitem__(self, key):
+        return self.__anims[key]
+
+    def __setitem__(self, key, value):
+        self.add_action(key, value)
 
 
 def black_image(size, transparent=True):

@@ -13,7 +13,7 @@ def end_backend():
 
 def set_mode(size):
     return pygame.display.set_mode(size,
-                                   pygame.FULLSCREEN|pygame.HWSURFACE)
+                                   pygame.HWSURFACE)
 
 def new_layer(size):
     return pygame.Surface(size, pygame.HWSURFACE|pygame.SRCALPHA)

@@ -2,11 +2,6 @@
 # -*- mode=python; coding: utf-8 -*-
 #
 
-class Skin(object):
-    def __init__(self):
-        self.__anims = {}
-        self.__current_anim = None
-        
 class Actor(object):
     def __init__(self):
         self.scenario = None
@@ -29,7 +24,7 @@ class Static(Actor):
         super(Static, self).__init__()
         self.__position = (0, 0)
         self.skin = skin
-        self.area = self.layer.get_rect()
+        self.area = skin.bounding_box
         self.area.topleft = self.__position
 
     @property
