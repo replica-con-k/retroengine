@@ -8,6 +8,7 @@ import os.path
 import retro.backend
 
 _IMAGE_ASSET_ = 'image'
+_SOUND_ASSET_ = 'sound'
 _UNKNOWN_TYPE_ = 'unknown'
 
 class AssetNotFound(Exception):
@@ -31,6 +32,8 @@ def _file_type_(filename):
     filename = filename.upper()
     if filename.endswith('PNG') or filename.endswith('JPG'):
         return _IMAGE_ASSET_
+    if filename.endswith('OGG') or filename.endswith('WAV'):
+        return _SOUND_ASSET_
     return _UNKNOWN_TYPE_
 
 
@@ -59,6 +62,8 @@ def load(resources_fname, is_required=True):
     if len(resources) == 1:
         if _file_type_(resources[0]) == _IMAGE_ASSET_:
             return retro.backend.load_image(resources[0])
+        elif _file_type_(resources[0]) == _SOUND_ASSET_:
+            return retro.backend.load_sound(resources[0])
         if is_required:
             raise UnrecognizedAsset(resources[0])
         # return None

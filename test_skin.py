@@ -33,9 +33,13 @@ def main():
     normal_anim = retro.assets.load('pelusilla_*.png').loop()
     smashed_anim = normal_anim.pingpong()
     normal_anim.fps = smashed_anim.fps = 10
-    pelusa_skin = retro.resources.Skin({
-        'default': normal_anim,
-        'smashed': smashed_anim
+    punch = retro.assets.load('punch.ogg')
+    pelusa_skin = retro.resources.Skin(
+        animations={
+            'default': normal_anim,
+            'smashed': smashed_anim
+        }, sounds={
+            'smashed': punch
         })
     
     pelusa1 = Movement1(pelusa_skin.clone())

@@ -22,7 +22,11 @@ def load_image(image_name):
     srf = resources.Image(pygame.image.load(image_name).convert())
     return srf
 
+def load_sound(sound_name):
+    return pygame.mixer.Sound(sound_name)
+
 def load_animation(image_list, fps=1):
+    # Animation is converted to alpha (so set_alpha() will not work)
     layers = [pygame.image.load(image).convert_alpha() for image in image_list]
     return resources.Animation(layers, fps)
 

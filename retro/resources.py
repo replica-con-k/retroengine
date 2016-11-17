@@ -5,6 +5,10 @@
 import backend
 import display
 
+class Sound(object):
+    def __init__(self, sound):
+        self.snd = sound
+        
 class Image(object):
     def __init__(self, layer):
         self.layer = layer
@@ -222,8 +226,8 @@ class Skin(object):
         assert(animation in self.actions)
         self.__current = animation
         self.__anims[self.__current].reset()
-        if animation in self.__sounds.keys():
-            backend.play_sound(self.__sounds[animation])
+        snd = self.__sounds.get(self.__current, no_sound())
+        snd.play()
 
     def add_action(self, action, animation, sound=None):
         self.__anims[action] = animation
@@ -241,3 +245,10 @@ def black_image(size, transparent=True):
     layer = backend.new_layer(self.__size)
     layer.fill((0, 0, 0, 0 if transparent else 255))
     return Image(layer)
+
+
+def no_sound():
+    class DummySound(object):
+        def play(self):
+            pass
+    return DummySound()
