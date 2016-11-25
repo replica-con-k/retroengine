@@ -5,6 +5,13 @@
 import pygame
 import resources
 
+EVENT_QUIT = pygame.QUIT
+EVENT_KEY_PRESS = pygame.KEYDOWN
+EVENT_KEY_RELEASE = pygame.KEYUP
+EVENT_MOUSE_PRESS = pygame.MOUSEBUTTONDOWN
+EVENT_MOUSE_RELEASE = pygame.MOUSEBUTTONUP
+EVENT_MOUSE_MOVE = pygame.MOUSEMOTION
+
 def init_backend():
     pygame.init()
 
@@ -38,3 +45,20 @@ def update_display(area=None):
 
 def new_clock():
     return pygame.time.Clock()
+
+class Event(object):
+    def __init__(self, ev_type, data, as_str='unknown'):
+        self.type = ev_type
+        self.as_dict = data
+        # Only for debug purposes
+        self.as_str = as_str
+    # Only for debug purposes
+    def __str__(self):
+        return self.as_str
+
+def wait_event():
+    event = pygame.event.wait()
+    return Event(event.type, event.dict, str(event))
+
+def clear_controller_events():
+    return pygame.event.clear()
