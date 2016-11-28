@@ -2,26 +2,17 @@
 # -*- mode=python; coding: utf-8 -*-
 #
 
+import pygame
+
 import retro
 import retro.actors
 import retro.assets
 import retro.scenes
 import retro.resources
 
-class Movement1(retro.actors.Drawable):
-    def update(self):
-        self.position = (self.position[0] + 1,
-                         self.position[1] + 1)
-        return self.area
-
+class Pelusa(retro.actors.Movable):
     def hit_by(self, who):
         self.skin.do('smashed')
-
-class Movement2(retro.actors.Drawable):
-    def update(self):
-        self.position = (self.position[0] - 1,
-                         self.position[1] + 1)
-        return self.area
 
 def main():
     display = retro.new_display()
@@ -42,12 +33,16 @@ def main():
             'smashed': punch
         })
     
-    pelusa1 = Movement1(pelusa_skin.clone())
-    pelusa2 = Movement2(pelusa_skin.clone())
-    scenario.spawn_actor(pelusa1, (-10, -10))
-    scenario.spawn_actor(pelusa2, (800, -10))
+    pelusa1 = Pelusa(pelusa_skin.clone())
+    pelusa1.moving_area = display.area
+    pelusa2 = Pelusa(pelusa_skin.clone())
+    pelusa2.moving_area = display.area
+    scenario.spawn_actor(pelusa1, (0, 0))
+    scenario.spawn_actor(pelusa2, (800, 0))
         
     for frameno in range(500):
+        pelusa1.move(2, 2)
+        pelusa2.move(-2, 2)
         display.update(scenario.update())
         
 if __name__ == '__main__':

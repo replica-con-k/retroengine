@@ -9,7 +9,7 @@ import retro.scenes
 import retro.resources
 import retro.controller
 
-class Actor(retro.actors.Static):
+class MousePointer(retro.actors.Drawable):
     def update(self):
         self.position = retro.controller.pointer()
         return self.area
@@ -24,7 +24,7 @@ def main():
     actor_anim = retro.assets.load('pelusilla_*.png')
     actor_anim.fps = 10
     
-    pelusa = Actor(actor_anim.loop())
+    pelusa = MousePointer(actor_anim.loop())
     scenario.spawn_actor(pelusa, (-200, -200))
 
     frameno = 0

@@ -17,6 +17,10 @@ class Display(object):
         self.__size = self.__scr.get_size()
 
     @property
+    def area(self):
+        return self.__scr.get_rect()
+    
+    @property
     def display(self):
         return self.__scr
 

@@ -46,6 +46,7 @@ class Static2D(Scenario):
         self.__dirty = []
         self.__fade_factor = None
         self.__fade_frame = None
+        self.__area = None
         if isinstance(image_or_size, resources.Image):
             # 'image_or_size' is Image
             self.set_background(image_or_size)
@@ -53,6 +54,10 @@ class Static2D(Scenario):
             # 'image_or_size' is size (2-tuple)
             self.set_background(resources.black_image(image_or_size))
 
+    @property
+    def area(self):
+        return self.__area
+    
     def stack(self, scenario, fade_in=None):
         super(Static2D, self).stack(scenario)
         if fade_in is not None:
@@ -150,17 +155,16 @@ class Static2DCollisions(Static2D):
     def update(self):
         dirty = super(Static2DCollisions, self).update()
         for actor in self.actors:
-            if actor.ethereal:
+            # Skip actors without body
+            if actor.body is None:
                 continue
-            target_actors = filter(lambda x: x is not actor,
+            # Don't check current actor and actors without body
+            target_actors = filter(lambda x: ((x is not actor) and
+                                              (x.body is not None)),
                                    self.actors)
             collisions = actor.area.collidelistall(
-                [target.area for target in target_actors])
+                [target.body for target in target_actors])
             # Notify
             for collision in collisions:
-                target = target_actors[collision]
-                if not target.ethereal:
-                    target.hit_by(actor)
+                target_actors[collision].hit_by(actor)
         return dirty
-
-

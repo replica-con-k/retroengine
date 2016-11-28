@@ -8,13 +8,13 @@ import retro.assets
 import retro.scenes
 import retro.resources
 
-class Movement1(retro.actors.Static):
+class Movement1(retro.actors.Drawable):
     def update(self):
         self.position = (self.position[0] + 1,
                          self.position[1] + 1)
         return self.area
 
-class Movement2(retro.actors.Static):
+class Movement2(retro.actors.Drawable):
     def update(self):
         self.position = (self.position[0] - 1,
                          self.position[1] + 1)
