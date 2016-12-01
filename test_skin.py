@@ -4,9 +4,11 @@
 
 import retro
 import retro.actors
+from retro.actors import action
 import retro.assets
 import retro.scenes
 import retro.resources
+
 
 class Movement1(retro.actors.Drawable):
     def update(self):
@@ -15,8 +17,13 @@ class Movement1(retro.actors.Drawable):
         return self.area
 
     def hit_by(self, who):
-        self.skin.do('smashed')
+        self.smashed()
 
+    @action
+    def smashed(self):
+        pass
+
+    
 class Movement2(retro.actors.Drawable):
     def update(self):
         self.position = (self.position[0] - 1,
@@ -33,13 +40,12 @@ def main():
     normal_anim = retro.assets.load('pelusilla_*.png').loop()
     smashed_anim = normal_anim.pingpong()
     normal_anim.fps = smashed_anim.fps = 10
-    punch = retro.assets.load('punch.ogg')
     pelusa_skin = retro.resources.Skin(
         animations={
             'default': normal_anim,
             'smashed': smashed_anim
         }, sounds={
-            'smashed': punch
+            'smashed': retro.assets.load('punch.ogg')
         })
     
     pelusa1 = Movement1(pelusa_skin.clone())
