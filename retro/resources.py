@@ -223,6 +223,8 @@ class Skin(object):
     def do(self, animation):
         if animation == self.__current:
             return
+        if animation not in self.actions:
+            raise AssertionError('Animation "%s" undefined.' % animation)
         assert(animation in self.actions)
         self.__current = animation
         self.__anims[self.__current].reset()

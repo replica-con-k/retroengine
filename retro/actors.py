@@ -7,10 +7,10 @@ def _no_op_(who):
 
 def action(action_implementation):
     '''Decorator to switch skin auto'''
-    def do_action(actor, *args, **kwargs):
-        actor.skin.do(action_implementation.__name__)
-        return action_implementation(actor, *args, **kwargs)
-    return do_action
+    def wrapped(*args):
+        args[0].skin.do(action_implementation.__name__)
+        return action_implementation(*args)
+    return wrapped
     
 class Actor(object):
     def __init__(self, skin):
@@ -66,6 +66,18 @@ class Movable(Drawable):
         self.speed_x = 0
         self.speed_y = 0
 
+        self.__current_action__ = None
+        self.current_action = self.default
+
+    @property
+    def current_action(self):
+        return self.__current_action__
+
+    @current_action.setter
+    def current_action(self, new_action_cb):
+        if new_action_cb != self.__current_action__:
+            self.__current_action__ = new_action_cb
+
     @property
     def position(self):
         return self.__position
@@ -95,10 +107,46 @@ class Movable(Drawable):
             return
         self.__moving_area = area
 
-    def move(self, offset_x=0, offset_y=0):
+    def _move_(self):
+        self.position = (self.position[0] + self.speed_x,
+                         self.position[1] + self.speed_y)
+
+    @action
+    def swap(self, offset_x=0, offset_y=0):
         self.position = (self.position[0] + offset_x,
                          self.position[1] + offset_y)
 
+    @action    
+    def up(self, new_speed=None):
+        self.speed_y = -new_speed or self.speed_y
+        self._move_()
+
+    @action
+    def down(self, new_speed=None):
+        self.speed_y = new_speed or self.speed_y
+        self._move_()
+
+    @action
+    def left(self, new_speed=None):
+        self.speed_x = -new_speed or self.speed_x
+        self._move_()
+
+    @action
+    def right(self, new_speed=None):
+        self.speed_x = new_speed or self.speed_x
+        self._move_()
+        
+    @action
+    def stop(self, x_axis=True, y_axis=True):
+        if x_axis:
+            self.speed_x = 0
+        if y_axis:
+            self.speed_y = 0
+
+    @action
+    def default(self):
+        self._move_()
+
     def update(self):
-        self.move(self.speed_x, self.speed_y)
+        self.current_action()
         return super(Movable, self).update()
