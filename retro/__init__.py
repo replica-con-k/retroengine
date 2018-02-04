@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- mode=python; coding: utf-8 -*-
-#
 
-import backend
-backend.init_backend()
+# import backend
+# backend.init_backend()
 
-import display
+# import display
 
-def new_display(*args, **kwargs):
-    return display.new(*args, **kwargs)
+# def new_display(*args, **kwargs):
+#     return display.new(*args, **kwargs)
+
+from _types import GameObject
