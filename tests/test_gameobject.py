@@ -15,9 +15,20 @@ class TestGameObject:
         '''Create new GameObject() and check its initial state'''
         go = retro.GameObject()
         assert isinstance(go, retro.GameObject)
+        assert go.scene is None
         assert not go.is_running
         assert go.is_alive
         assert len(go.tags) == 0
+
+    def test_creation_with_tags(self):
+        '''Create new GameObject() with initial tags'''
+        go = retro.GameObject(tags=[TAG1])
+        assert isinstance(go, retro.GameObject)
+        assert go.scene is None
+        assert not go.is_running
+        assert go.is_alive
+        assert TAG1 in go.tags
+        assert go.is_tagged_as(TAG1)
 
     def test_starting(self):
         '''Start a GameObject() and check its state'''
