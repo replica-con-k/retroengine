@@ -9,4 +9,4 @@
 # def new_display(*args, **kwargs):
 #     return display.new(*args, **kwargs)
 
-from _types import GameObject, Scene
+from _types import GameObject, Scene, Game

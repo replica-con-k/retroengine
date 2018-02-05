@@ -12,13 +12,14 @@ class TestScene:
 
     def test_creation(self):
         '''Create new Scene() and check its initial state'''
-        scene = retro.Scene()
+        scene = retro.Scene('test_scene')
         assert isinstance(scene, retro.Scene)
+        assert scene.game is None
         assert len(scene.game_objects) == 0
 
     def test_add_game_object(self):
         '''Add GameObject() to a scene'''
-        scene = retro.Scene()
+        scene = retro.Scene('test_scene')
         game_object = retro.GameObject()
         scene.add_game_object(game_object)
         assert len(scene.game_objects) == 1
@@ -27,7 +28,7 @@ class TestScene:
 
     def test_remove_game_object(self):
         '''Test remove GameObject() from a scene'''
-        scene = retro.Scene()
+        scene = retro.Scene('test_scene')
         game_object = retro.GameObject()
         scene.add_game_object(game_object)
         scene.remove_game_object(game_object)
@@ -35,14 +36,14 @@ class TestScene:
 
     def test_remove_unknown_game_object(self):
         '''Remove GameObject() not added to a scene'''
-        scene = retro.Scene()
+        scene = retro.Scene('test_scene')
         game_object = retro.GameObject()
         with pytest.raises(KeyError):
             scene.remove_game_object(game_object)
 
     def test_search_game_object_by_tags(self):
         '''Search game objects by tags'''
-        scene = retro.Scene()
+        scene = retro.Scene('test_scene')
         game_object1 = retro.GameObject()
         game_object2 = retro.GameObject(tags=[TAG1])
         game_object3 = retro.GameObject(tags=[TAG1, TAG2])
@@ -66,7 +67,7 @@ class TestScene:
             def update(self):
                 self.update_called = True
 
-        scene = retro.Scene()
+        scene = retro.Scene('test_scene')
         game_object1 = MyGameObject()
         game_object2 = MyGameObject()
         scene.add_game_object(game_object1)
@@ -78,7 +79,7 @@ class TestScene:
 
     def test_garbage_collector(self):
         '''Test if Scene() removes dead GameObject() objects'''
-        scene = retro.Scene()
+        scene = retro.Scene('test_scene')
         game_object = retro.GameObject()
         scene.add_game_object(game_object)
         assert game_object in scene.game_objects

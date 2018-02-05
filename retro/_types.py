@@ -2,6 +2,7 @@
 # -*- mode=python; coding: utf-8 -*-
 
 import uuid
+import threading
 
 from _const import WAITING_START, STARTED, KILLED
 
@@ -83,9 +84,24 @@ class GameObject(object):
 
 class Scene(object):
     '''Every game part'''
-    def __init__(self):
+    def __init__(self, name):
+        self._name_ = name
         self._game_object_ = {}
+        self._game_ = None
 
+    @property
+    def name(self):
+        return self._name_
+
+    @property
+    def game(self):
+        return self._game_
+
+    @game.setter
+    def game(self, new_game):
+        assert isinstance(new_game, Game)
+        self._game_ = new_game
+        
     @property
     def game_objects(self):
         return self._game_object_.values()
@@ -125,3 +141,55 @@ class Scene(object):
                 self.remove_game_object(game_object)
                 continue
             game_object.update()
+
+
+class Game(threading.Thread):
+    '''The game itself'''
+    def __init__(self, initial_scene):
+        super(Game, self).__init__()
+        assert isinstance(initial_scene, Scene)
+        initial_scene.game = self
+        self.__scenes__ = {
+            initial_scene.name: initial_scene
+        }
+        self.__current_scene__ = initial_scene.name
+        self._running_ = False
+        self._tick_ = 0
+
+    @property
+    def current_scene(self):
+        return self.__scenes__[self.__current_scene__]
+
+    @property
+    def scenes(self):
+        return self.__scenes__.keys()
+
+    @property
+    def running(self):
+        return self._running_
+
+    @property
+    def ticks(self):
+        return self._tick_
+    
+    def add_scene(self, scene):
+        assert isinstance(scene, Scene)
+        scene.game = self
+        self.__scenes__[scene.name] = scene
+        
+    def switch_scene(self, scene_name):
+        if scene_name not in self.__scenes__.keys():
+            raise KeyError(scene_name)
+        self.__current_scene__ = scene_name
+
+    def start(self):
+        self._running_ = True
+        super(Game, self).start()
+        
+    def run(self):
+        while self._running_:
+            self.current_scene.update()
+            self._tick_ += 1
+
+    def quit(self):
+        self._running_ = False
