@@ -134,6 +134,12 @@ class Scene(object):
         return set(filter(lambda game_object: game_object.is_tagged_as(tag),
                           self._game_object_.values()))
 
+    def start(self):
+        self.on_start()
+        for game_object in self.game_objects:
+            if game_object.is_ready_to_start:
+                game_object.start()
+
     def update(self):
         '''Every frame update all game objects'''
         for game_object in self.game_objects:
@@ -142,6 +148,10 @@ class Scene(object):
                 continue
             game_object.update()
 
+    def on_start(self):
+        '''Called before Scene() start running'''
+        pass
+    
 
 class Game(threading.Thread):
     '''The game itself'''

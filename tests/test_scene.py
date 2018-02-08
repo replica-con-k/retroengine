@@ -56,7 +56,43 @@ class TestScene:
         assert game_object2 not in scene.game_objects_tagged_as(TAG2)
         assert game_object3 in scene.game_objects_tagged_as(TAG1)
         assert game_object3 in scene.game_objects_tagged_as(TAG2)
+
+    def test_on_start(self):
+        '''Test if start() calls on_start() method'''
+        class MyScene(retro.Scene):
+            def __init__(self, name):
+                super(MyScene, self).__init__(name)
+                self.on_start_called = False
+
+            def on_start(self):
+                self.on_start_called = True
+
+        scene = MyScene('test_scene')
+        assert not scene.on_start_called
+        scene.start()
+        assert scene.on_start_called
         
+    def test_start_function(self):
+        '''Test if start() calls every GameObject().start() method'''
+        class MyGameObject(retro.GameObject):
+            def __init__(self):
+                super(MyGameObject, self).__init__()
+                self.start_called = False
+
+            def on_start(self):
+                self.start_called = True
+
+        scene = retro.Scene('test_scene')
+        game_object1 = MyGameObject()
+        game_object2 = MyGameObject()
+        scene.add_game_object(game_object1, auto_start=False)
+        scene.add_game_object(game_object2, auto_start=False)
+        assert not game_object1.start_called
+        assert not game_object2.start_called        
+        scene.start()
+        assert game_object1.start_called
+        assert game_object2.start_called        
+
     def test_update_function(self):
         '''Test if update() is called on every GameObject() objects'''
         class MyGameObject(retro.GameObject):
