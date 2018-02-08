@@ -85,8 +85,8 @@ class TestScene:
         scene = retro.Scene('test_scene')
         game_object1 = MyGameObject()
         game_object2 = MyGameObject()
-        scene.add_game_object(game_object1, auto_start=False)
-        scene.add_game_object(game_object2, auto_start=False)
+        scene.add_game_object(game_object1)
+        scene.add_game_object(game_object2)
         assert not game_object1.start_called
         assert not game_object2.start_called        
         scene.start()

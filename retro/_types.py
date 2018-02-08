@@ -117,7 +117,7 @@ class Scene(object):
             return game_object
         raise ValueError('Cannot cast object of type: %s' % type(game_object))
 
-    def add_game_object(self, game_object, auto_start=True):
+    def add_game_object(self, game_object, auto_start=False):
         assert isinstance(game_object, GameObject)
         self._game_object_[game_object.id] = game_object
         game_object.scene = self
