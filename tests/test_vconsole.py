@@ -5,6 +5,7 @@ import time
 import pytest
 
 import retro.vconsole
+from retro.backends.interfaces import State
 
 INITIAL_SCENE = 'test_scene'
 OTHER_SCENE = 'other_scene'
@@ -21,7 +22,7 @@ class TestVConsole:
         '''Check if VConsole can be powered on'''
         retro.vconsole.power_on()
         assert retro.vconsole.is_powered()
-        assert isinstance(retro.vconsole.state, dict)
+        assert isinstance(retro.vconsole.state, State)
 
     def test_double_power_on(self):
         '''Check if VConsole can be already powered on'''
@@ -34,7 +35,6 @@ class TestVConsole:
         assert retro.vconsole.is_powered()
         retro.vconsole.power_off()
         assert not retro.vconsole.is_powered()
-        assert retro.vconsole.state is None
         assert retro.vconsole.screen is None
         
     def test_double_power_off(self):
@@ -42,6 +42,5 @@ class TestVConsole:
         assert not retro.vconsole.is_powered()
         retro.vconsole.power_off()
         assert not retro.vconsole.is_powered()
-        assert retro.vconsole.state is None
         assert retro.vconsole.screen is None
         
