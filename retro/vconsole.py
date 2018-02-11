@@ -25,14 +25,16 @@ class NoConsole(retro.backends.interfaces.VirtualConsole):
         return None
     
 _CONSOLE_ = NoConsole()
-screen = _CONSOLE_.screen
 state = _CONSOLE_.state
+screen = _CONSOLE_.screen
+sprite_manager = _CONSOLE_.sprite_manager
 
 
 def power_on():
     '''Initialize backend and VirtualConsole fields'''
-    global screen
     global state
+    global screen
+    global sprite_manager
     global _CONSOLE_
 
     if _CONSOLE_.powered:
@@ -42,6 +44,7 @@ def power_on():
     _CONSOLE_ = retro.backends.new_virtual_console()
     state = _CONSOLE_.state
     screen = _CONSOLE_.screen
+    sprite_manager = _CONSOLE_.sprite_manager
     _CONSOLE_.power_on()
 
 
