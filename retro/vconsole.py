@@ -20,7 +20,10 @@ class NoConsole(retro.backends.interfaces.VirtualConsole):
     def state(self):
         return None
 
-
+    @property
+    def sprite_manager(self):
+        return None
+    
 _CONSOLE_ = NoConsole()
 screen = _CONSOLE_.screen
 state = _CONSOLE_.state
